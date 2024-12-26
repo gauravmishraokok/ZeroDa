@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero Da</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+  </style>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="index.js" defer></script>
+</head>
+
+
+
+<div>
+  <center><div >
+    <h1><i data-lucide="wallet" class="lucide title"></i> Zero Da</h1>
+    <p><b>Because Balance Shouldn’t Be Zero, Da!</b></p>
+  </center>
+    <div class="container">
+      <h4>Your Balance</h4>
+      <h1 id="balance">&#8377;0.00</h1>
+      <div class="inc-exp-container">
+        <div>
+          <h4>Income</h4>
+          <p id="money-plus" class="money-plus">+&#8377;0.00</p>
+        </div>
+        <div>
+          <h4>Expense</h4>
+          <p id="money-minus" class="money-minus">-&#8377;0.00</p>
+        </div>
+      </div>
+
+      <h3>
+        <i data-lucide="badge-plus" class="lucide"></i> Add new transaction
+      </h3>
+      <form id="form" class="form">
+        <div class="form-control">
+          <label for="text">Description</label>
+          <input type="text" id="text" placeholder="Enter text..." />
+        </div>
+        <div class="form-control">
+          <label for="amount">Amount</label>
+          <input type="number" id="amount" placeholder="Enter amount..." />
+        </div>
+        <div class="form-control">
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="income">Income</option>
+            <option value="investments">Investments</option>
+            <option value="groceries">Groceries</option>
+            <option value="utilities">Utilities</option>
+            <option value="needs">Needs</option>
+            <option value="transportation">Transportation</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="health">Health</option>
+            <option value="education">Education</option>
+            <option value="dining">Dining</option>
+            <option value="shopping">Shopping</option>
+            <option value="miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+        <div class="form-control">
+          <label for="date">Date</label>
+          <input type="date" id="date" />
+        </div>
+        <div class="buttons">
+          <button class="btn income">Add income</button>
+          <button class="btn expense">Add expense</button>
+        </div>
+      </form>
+
+      <h3><i data-lucide="coins" class="lucide"></i> History</h3>
+      <div class="filter-container">
+        <label for="filter" style="margin: 10px;">Filter:</label>
+        <select id="filter">
+          <option value="all">All</option>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+        
+        <label for="frequency" style="margin: 10px;">Frequency:</label>
+        <select id="frequency">
+          <option value="all">All Time</option>
+          <option value="last-week">Last Week</option>
+          <option value="last-month">Last Month</option>
+          <option value="last-year">Last Year</option>
+        </select>
+      </div>
+      
+    
+
+    <div class = "right">
+      <ul id="list" class="list">
+        <!-- Transactions will be dynamically added here -->
+      </ul>
+      <div>
+      </div>
+
+      <a href="chart.html" class="btn">View Expenditure Chart</a>
+      <a href="ai-merge.html" class="btn">Koompi : Your Personal AI Accountant</a>
+    </div>
+
+
+</html>
