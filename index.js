@@ -107,17 +107,9 @@ function addTransactionDOM(transaction) {
   document.getElementById('list').prepend(item);
 }
 
-
-
-
-
-
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-
-
 
 function updateBalance() {
   const balance = transactions.reduce((acc, transaction) => acc + transaction.amount, 0);
@@ -178,8 +170,6 @@ function filterTransactions() {
 
 // Add event listener for frequency dropdown
 document.getElementById('frequency').addEventListener('change', filterTransactions);
-
-
 
 // Initialize the app
 function init() {

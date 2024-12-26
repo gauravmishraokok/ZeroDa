@@ -16,6 +16,7 @@ mongoose.connect('mongodb://localhost:27017/expense-tracker', {
   useUnifiedTopology: true,
 });
 
+
 // Define schemas and models
 const transactionSchema = new mongoose.Schema({
   text: String,
@@ -31,28 +32,6 @@ const messageSchema = new mongoose.Schema({
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
 const Message = mongoose.model('Message', messageSchema);
-
-// Mock AI model
-function gemmaModelAnalyze(content) {
-  const match = content.match(/₹(\d+)\s+to\s+([\w\s]+)/i);
-  if (!match) return null;
-
-  // Extract details
-  const amount = parseInt(match[1], 10);
-  const recipient = match[2].trim();
-
-  // Map recipient to a predefined category
-  const categories = {
-    UberEats: 'Food',
-    Amazon: 'Shopping',
-    Flipkart: 'Shopping',
-    'HDFC Bank': 'Finance',
-  };
-
-  const category = categories[recipient] || 'Miscellaneous';
-
-  return { amount, recipient, category };
-}
 
 // Routes
 app.get('/transactions', async (req, res) => {

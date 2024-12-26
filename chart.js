@@ -1,4 +1,4 @@
-let chart, categoryChart, trendChart;
+let chart, categoryChart;
 
 async function fetchTransactions() {
   const response = await fetch('http://localhost:5000/transactions');
@@ -117,73 +117,6 @@ function updateCharts(transactions) {
         mode: 'nearest',
         intersect: false,
         animationDuration: 200
-      }
-    }
-  });
-
-  // Add Spending Trend Chart
-  const trendCtx = document.createElement('canvas');
-  trendCtx.id = 'trendChart';
-  document.querySelector('.container').insertBefore(trendCtx, document.querySelector('.btn'));
-
-  // Group transactions by date
-  const dailyTotals = transactions.reduce((acc, transaction) => {
-    const date = new Date(transaction.date).toLocaleDateString();
-    acc[date] = (acc[date] || 0) + (transaction.amount < 0 ? Math.abs(transaction.amount) : 0);
-    return acc;
-  }, {});
-
-  const sortedDates = Object.keys(dailyTotals).sort((a, b) => new Date(a) - new Date(b));
-
-  if (trendChart) {
-    trendChart.destroy();
-  }
-
-  trendChart = new Chart(trendCtx, {
-    type: 'line',
-    data: {
-      labels: sortedDates,
-      datasets: [{
-        label: 'Daily Spending Trend',
-        data: sortedDates.map(date => dailyTotals[date]),
-        borderColor: '#453596',
-        backgroundColor: 'rgba(69, 53, 150, 0.1)',
-        fill: true,
-        tension: 0.4
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        title: {
-          display: true,
-          text: 'Spending Trend Over Time'
-        },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return `₹${context.raw.toFixed(2)}`;
-            }
-          }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return '₹' + value;
-            }
-          }
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      },
-      animation: {
-        duration: 2000,
-        easing: 'easeInOutQuart'
       }
     }
   });
