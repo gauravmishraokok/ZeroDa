@@ -27,7 +27,7 @@ function capitalizeFirstLetter(string) {
 async function predictMonthlySpend(apiKey) {
   const transactions = await fetchTransactions();
 
-  const weights = [0.4, 0.6, 0.7, 0.9]; // Weights for Weeks.
+  const weights = [0.40, 0.35, 0.30, 0.30]; // Weights for Weeks.
 
   const weeklySpends = [0, 0, 0, 0];
   transactions.forEach((transaction) => {
@@ -78,17 +78,18 @@ async function getAIInsights(apiKey) {
   const transactions = await fetchTransactions();
   const message = `
     Analyze the following transaction data and provide concise yet insightful feedback. 
-    Focus on praising positive spending habits (e.g., investments, consistent budgeting) and giving constructive cautions about areas of potential improvement (e.g., overspending in discretionary categories). 
+    Focus on praising positive spending habits (e.g., investments, consistent budgeting) as well as positive life habits like buying books and courses to upskill etc and giving constructive cautions about areas of potential improvement (e.g., overspending in discretionary categories). 
     Organize the insights clearly with structured headings and formatting. 
 
     Use the following guidelines for your analysis:
     Primary Guideline -> YOU ARE SUPPOSED TO RETURN A NICELY FORMATTED HTML TEXT WHICH USES ALL THE NECESSARY TAGS AND FORMATS THE WHOLE TEXT WELL TO LOOK GOOD. THE TEXT SHOULD NOT BE TOO LONG. THE TEXT SHOULD BE GIVEN IN SUCH A WAY THAT the three backticks html and ending backticks ARE NOT there so that printing is better. ALSO UNDER ALL THE HEADINGS, THERE SHOULD BE CONCISE BULLET POINTS WITH AMOUNTS WHEREVER THEY ARE NEEDED. AND NOT PARAGRAPHS OF TEXT. THE MAIN HEADING SHOULD BE ABOUT INSIGHTS AND BOLD. MAKE SURE THE HTML IS WITHOUT BACKTICKS AND JUST RAW TEXT
     
-    1. **Positive Habits:** Highlight strengths in financial behavior, such as savings, investments, or consistent spending on necessities.
-    2. **Negative Habits:** Identify areas of overspending and suggest actionable improvements. Avoid listing every individual transaction but summarize them under categories (e.g., Needs, Investments, Discretionary Spending).
-    3. **Unique Insights:** Compare discretionary spending (e.g., dining, shopping) against income percentage and provide a balanced perspective (e.g., "Spending on dining was 10% of income, which might require moderation").
+    1. **Positive Habits:** Highlight strengths in financial behavior, such as savings, investments, or consistent spending on necessities, You can also highlight other positive life habits, But in Short.
+    2. **Negative Habits:** Identify areas of overspending and suggest actionable improvements. Avoid listing every individual transaction but summarize them under categories (e.g., Needs, Investments, Discretionary Spending, If the amount is less than 2% of income then dont highlight it).
+    3. **Unique Insights:** Compare discretionary spending (e.g., dining, shopping) against income percentage and provide a balanced perspective (e.g., "Spending on dining was 10% of income, which might require moderation"). You can also highlight the categories which have the most spend compared to income. Do not do for all the categories, But combine and show where spend was high or justified but use better words.
     4. **Trend Analysis:** Detect patterns or trends in spending habits, such as seasonal spikes or consistent overspending in a specific category. Highlight if spending aligns with long-term financial goals.
-    5. **Advice/Forecasting:** Suggest specific steps to optimize future spending, like "Consider allocating an additional 5% to investments for long-term growth" or "Reduce dining frequency to save ₹5,000 next month."
+    5. **Forecasting:** Suggest specific steps to optimize future spending, like "Consider allocating an additional 5% to investments for long-term growth" or "Reduce dining frequency to save ₹5,000 next month" or "If you allocate X amount every month you can save Y amount and thus do Z".(Here do not make the user save too much too, Suggest less radical changes, If a spend category accounts for less than 2-5% of income unless highly not needed, Dont sugguest a change.)
+    6. **Advice:** Gives valuable financial advice after noticing all patterns. Few Examples can be "good allocation of budget towards books and courses, Try to diversify while upskilling" or "There has been a lot of spend on dining indicating bad eating habits, Try to reduce it and replace with homecooked food" or "Shopping was high(Have 2 cases saying it might be justifiable during some specific season or festival but not always or second case saying its too high) and suggest the 24 hour wait method before impulsive shopping etc", like this noticed patterns in the spend can be given as personally catered advice there should be a total of 5 advices. 
   
     Transactions: ${JSON.stringify(transactions)};
   `;
