@@ -64,6 +64,6 @@ The **Zero Da** is a robust tool designed to help users manage their finances ef
 
 - As this app involves sharing a lot of data with the AI, it is important to ensure the security of the data.
 
-![security.png](https://i.imgur.com/BsnzKFX_d.webp?maxwidth=1520&fidelity=grand)
+![security image](https://i.imgur.com/BsnzKFX_d.webp?maxwidth=1520&fidelity=grand)
 
 ## Because Balance Shouldn’t Be Zero, Da :)
