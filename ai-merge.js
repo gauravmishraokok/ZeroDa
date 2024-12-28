@@ -326,13 +326,13 @@ function displayProcessedMessages(results, transactions, containerId) {
 document
   .getElementById("process-messages-2-btn")
   .addEventListener("click", () => {
-    const apiKey = "AIzaSyDWbmbufjfjB2j5BMEGt5WMScuFtEyqNtA";
+    const apiKey = "YOUR_API_KEY_HERE";
     processMessagesWithAI(apiKey);
   });
 
 //Monthly Spending Forecast | Predict Monthly Spend ->
 document.getElementById("predict-btn").addEventListener("click", () => {
-  const apiKey = "AIzaSyDWbmbufjfjB2j5BMEGt5WMScuFtEyqNtA";
+  const apiKey = "YOUR_API_KEY_HERE";
   predictMonthlySpend(apiKey);
 
   const predictionContainer = document.getElementById("prediction-container");
@@ -346,7 +346,7 @@ document.getElementById("predict-btn").addEventListener("click", () => {
 
 //Generate AI Insights Button ->
 document.getElementById("insights-btn").addEventListener("click", () => {
-  const apiKey = "AIzaSyDWbmbufjfjB2j5BMEGt5WMScuFtEyqNtA";
+  const apiKey = "YOUR_API_KEY_HERE";
   getAIInsights(apiKey);
 
   const aiInsightsContainer = document.getElementById("ai-insights");
