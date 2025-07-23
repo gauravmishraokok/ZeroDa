@@ -9,49 +9,64 @@
 
 ```mermaid
 flowchart TD
-    A[Zero Da Features] --> B[Dashboard]
-    A --> C[Analytics]
-    A --> D[AI Interface]
+    %% Root node
+    ZD[Zero Da<br>Feature Overview]
 
-    B --> B1[Balance Overview]
-    B --> B2[Add/Delete Transactions]
-    B --> B3[Transaction History]
+    %% Connect root to feature groups
+    ZD --> DBGroup
+    ZD --> ANGroup
+    ZD --> AIGroup
 
-    C --> C1[Expenditure Trends]
-    C --> C2[Category Breakdown]
-    C --> C3[Line Graphs]
+    %% Dashboard Subgraph
+    subgraph DBGroup [ ]
+        direction TB
+        DB[Dashboard<br>Balance / Txn / History]
+        DB --> BAL[Balance<br>Live View]
+        DB --> TXN[Transactions<br>Auto Categorized]
+        DB --> HIST[History<br>Date Filter]
+    end
 
-    D --> D1[SMS Syncing]
-    D --> D2[Spending Forecast]
-    D --> D3[AI Insights]
-    D1 --> D1a[Process SMS Messages]
-    D1 --> D1b[Auto-create Transactions]
-    D2 --> D2a[Predict Monthly Spend]
-    D2 --> D2b[Budget Warnings]
-    D3 --> D3a[Spending Habits]
-    D3 --> D3b[Trend Analysis]
-    D3 --> D3c[Forecasting]
+    %% Analytics Subgraph
+    subgraph ANGroup [ ]
+        direction TB
+        AN[Analytics<br>Trends / Categories]
+        AN --> TRENDS[Trends<br>Spending Over Time]
+        AN --> CATS[Categories<br>Spending Areas]
+        AN --> GRAPHS[Graphs<br>Visual Insights]
+    end
 
-    style A fill:#453596,stroke:#222,stroke-width:2px,color:#fff
-    style B fill:#f3f0fa,stroke:#453596,stroke-width:1.5px
-    style C fill:#f3f0fa,stroke:#453596,stroke-width:1.5px
-    style D fill:#f3f0fa,stroke:#453596,stroke-width:1.5px
-    style B1 fill:#fff,stroke:#bbb
-    style B2 fill:#fff,stroke:#bbb
-    style B3 fill:#fff,stroke:#bbb
-    style C1 fill:#fff,stroke:#bbb
-    style C2 fill:#fff,stroke:#bbb
-    style C3 fill:#fff,stroke:#bbb
-    style D1 fill:#fff,stroke:#bbb
-    style D2 fill:#fff,stroke:#bbb
-    style D3 fill:#fff,stroke:#bbb
-    style D1a fill:#f8f9fa,stroke:#bbb
-    style D1b fill:#f8f9fa,stroke:#bbb
-    style D2a fill:#f8f9fa,stroke:#bbb
-    style D2b fill:#f8f9fa,stroke:#bbb
-    style D3a fill:#f8f9fa,stroke:#bbb
-    style D3b fill:#f8f9fa,stroke:#bbb
-    style D3c fill:#f8f9fa,stroke:#bbb
+    %% AI Assistant Subgraph
+    subgraph AIGroup [ ]
+        direction TB
+        AI[AI Assistant<br>SMS / Forecast / Insights]
+        AI --> SMS[SMS Sync<br>Auto Entry]
+        AI --> FC[Forecast<br>Budget Alerts]
+        AI --> INS[Insights<br>Spending Habits]
+    end
+
+    %% Styling - NO comma-separated styles to avoid ghost nodes
+    style ZD fill:#453596,stroke:#222,stroke-width:2px,color:#fff
+
+    style DB fill:#f3f0fa,stroke:#453596,stroke-width:1.5px
+    style BAL fill:#f8f9fa,stroke:#bbb
+    style TXN fill:#f8f9fa,stroke:#bbb
+    style HIST fill:#f8f9fa,stroke:#bbb
+
+    style AN fill:#f3f0fa,stroke:#453596,stroke-width:1.5px
+    style TRENDS fill:#f8f9fa,stroke:#bbb
+    style CATS fill:#f8f9fa,stroke:#bbb
+    style GRAPHS fill:#f8f9fa,stroke:#bbb
+
+    style AI fill:#f3f0fa,stroke:#453596,stroke-width:1.5px
+    style SMS fill:#f8f9fa,stroke:#bbb
+    style FC fill:#f8f9fa,stroke:#bbb
+    style INS fill:#f8f9fa,stroke:#bbb
+
+    style DBGroup fill:transparent,stroke:transparent
+    style ANGroup fill:transparent,stroke:transparent
+    style AIGroup fill:transparent,stroke:transparent
+
+
 ```
 
 ---
