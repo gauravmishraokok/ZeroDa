@@ -1,117 +1,82 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
-const CATEGORIES = [
-  'Salary', 'Food', 'Transport', 'Medical', 'Shopping', 'Entertainment', 'Miscellaneous'
-];
+function TransactionForm({ onAdd }) {
+  const [type, setType] = useState('expense');
+  const [category, setCategory] = useState('Food');
+  const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
-const TransactionForm = ({ onAddTransaction }) => {
-  const [formData, setFormData] = useState({
-    text: '',
-    amount: '',
-    category: CATEGORIES[0],
-    date: new Date().toISOString().split('T')[0]
-  });
-  const [submitType, setSubmitType] = useState('income');
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const categories = {
+    income: ['Salary', 'Freelance', 'Investment', 'Other'],
+    expense: ['Food', 'Transport', 'Utilities', 'Entertainment', 'Shopping', 'Other']
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const isIncome = submitType === 'income';
-      const response = await axios.post('http://localhost:5000/transactions', {
-        ...formData,
-        amount: isIncome ? Math.abs(parseFloat(formData.amount)) : -Math.abs(parseFloat(formData.amount)),
-      });
-      onAddTransaction(response.data);
-      setFormData({
-        text: '',
-        amount: '',
-        category: CATEGORIES[0],
-        date: new Date().toISOString().split('T')[0]
-      });
-    } catch (error) {
-      console.error('Error adding transaction:', error);
-    }
+    onAdd({ type, category, amount, description, date });
+    setAmount('');
+    setDescription('');
+    setDate(new Date().toISOString().split('T')[0]);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="transaction-form">
-      <div className="form-group">
-        <label htmlFor="text">Description</label>
-        <input
-          type="text"
-          id="text"
-          name="text"
-          value={formData.text}
-          onChange={handleChange}
-          required
-          style={{ background: '#fff', border: '2px solid #eee', borderRadius: '10px' }}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="amount">Amount</label>
-        <input
-          type="number"
-          id="amount"
-          name="amount"
-          value={formData.amount}
-          onChange={handleChange}
-          required
-          style={{ background: '#fff', border: '2px solid #eee', borderRadius: '10px' }}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="category">Category</label>
-        <select
-          id="category"
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          style={{ background: '#fff', border: '2px solid #eee', borderRadius: '10px' }}
-        >
-          {CATEGORIES.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
-      </div>
-      <div className="form-group">
-        <label htmlFor="date">Date</label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          required
-          style={{ background: '#fff', border: '2px solid #eee', borderRadius: '10px' }}
-        />
-      </div>
-      <div className="buttons">
-        <button
-          type="submit"
-          className="btn income"
-          onClick={() => setSubmitType('income')}
-        >
-          Add income
+    <div className="transaction-form">
+      <h3>Add Transaction</h3>
+      <form onSubmit={handleSubmit}>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Type</label>
+            <select value={type} onChange={(e) => setType(e.target.value)}>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Category</label>
+            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+              {categories[type].map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Amount</label>
+            <input
+              type="number"
+              step="0.01"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Description</label>
+          <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Optional description"
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Add Transaction
         </button>
-        <button
-          type="submit"
-          className="btn expense"
-          onClick={() => setSubmitType('expense')}
-        >
-          Add expense
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
-};
+}
 
 export default TransactionForm;

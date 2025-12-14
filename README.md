@@ -155,4 +155,4 @@ As this app involves sharing financial data with AI services, data security is a
 
 ---
 
-**Made by Gaurav Mishra**
+**Made by gaurav1, gaurav2, faiz**
