@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import pool from '../config/db.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -62,6 +63,25 @@ router.post('/login', async (req, res) => {
     );
 
     res.json({ token, username: user.username });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.get('/budget', authenticateToken, async (req, res) => {
+  try {
+    const [users] = await pool.query('SELECT monthly_budget FROM users WHERE id = ?', [req.user.id]);
+    res.json({ monthlyBudget: users[0].monthly_budget });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.put('/budget', authenticateToken, async (req, res) => {
+  try {
+    const { monthlyBudget } = req.body;
+    await pool.query('UPDATE users SET monthly_budget = ? WHERE id = ?', [monthlyBudget, req.user.id]);
+    res.json({ monthlyBudget });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }

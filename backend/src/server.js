@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Initialize database
 const startServer = async () => {
   await initDatabase();
   
