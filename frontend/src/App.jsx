@@ -1,11 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+
+// Component imports
 import TransactionForm from './components/TransactionForm'
 import TransactionList from './components/TransactionList'
 import VisualizationPage from './components/VisualizationPage'
 import AIPage from './components/AIPage'
+
+// Context imports
 import { TransactionProvider, useTransactions } from './contexts/TransactionContext'
 import { AIProvider } from './contexts/AIContext'
+
+// Styles
 import './App.css'
 
 // Add CSP headers
@@ -62,9 +68,12 @@ function AppContent() {
     return () => document.querySelector('.navbar').removeEventListener('click', handleNav);
   }, []);
 
-  const totalBalance = transactions.reduce((acc, t) => acc + t.amount, 0);
-  const totalIncome = transactions.filter(t => t.amount > 0).reduce((acc, t) => acc + t.amount, 0);
-  const totalExpense = Math.abs(transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount, 0));
+  const { totalBalance, totalIncome, totalExpense } = useMemo(() => {
+    const balance = transactions.reduce((acc, t) => acc + t.amount, 0);
+    const income = transactions.filter(t => t.amount > 0).reduce((acc, t) => acc + t.amount, 0);
+    const expense = Math.abs(transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount, 0));
+    return { totalBalance: balance, totalIncome: income, totalExpense: expense };
+  }, [transactions]);
 
   return (
     <div className="app-container">

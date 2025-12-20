@@ -6,16 +6,25 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Middleware configuration
 app.use(cors());
 app.use(bodyParser.json());
 
-// Connect to MongoDB
+// Connect to MongoDB database
 mongoose.connect('mongodb://localhost:27017/expense-tracker', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+});
+
+// Database connection event handlers
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB connected successfully');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
 });
 
 // Define schemas and models
@@ -36,24 +45,51 @@ const Message = mongoose.model('Message', messageSchema);
 
 // Routes
 app.get('/transactions', async (req, res) => {
-  const transactions = await Transaction.find();
-  res.json(transactions);
+  try {
+    const transactions = await Transaction.find().sort({ date: -1 });
+    res.json(transactions);
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    res.status(500).json({ message: 'Failed to fetch transactions', error: error.message });
+  }
 });
 
 app.post('/transactions', async (req, res) => {
-  const newTransaction = new Transaction(req.body);
-  await newTransaction.save();
-  res.json(newTransaction);
+  try {
+    const { text, amount, category } = req.body;
+    if (!text || amount === undefined || !category) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    const newTransaction = new Transaction(req.body);
+    await newTransaction.save();
+    res.status(201).json(newTransaction);
+  } catch (error) {
+    console.error('Error creating transaction:', error);
+    res.status(500).json({ message: 'Failed to create transaction', error: error.message });
+  }
 });
 
 app.delete('/transactions/:id', async (req, res) => {
-  await Transaction.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Transaction deleted' });
+  try {
+    const transaction = await Transaction.findByIdAndDelete(req.params.id);
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transaction not found' });
+    }
+    res.json({ message: 'Transaction deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting transaction:', error);
+    res.status(500).json({ message: 'Failed to delete transaction', error: error.message });
+  }
 });
 
 app.get('/messages', async (req, res) => {
-  const messages = await Message.find();
-  res.json(messages);
+  try {
+    const messages = await Message.find().sort({ date: -1 });
+    res.json(messages);
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ message: 'Failed to fetch messages', error: error.message });
+  }
 });
 
 // Helper: Call Gemini API for message analysis

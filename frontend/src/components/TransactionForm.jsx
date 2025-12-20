@@ -18,8 +18,15 @@ const TransactionForm = ({ onAddTransaction }) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'text' ? value : value
     }));
+  };
+
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      setFormData(prev => ({ ...prev, amount: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -63,7 +70,9 @@ const TransactionForm = ({ onAddTransaction }) => {
           id="amount"
           name="amount"
           value={formData.amount}
-          onChange={handleChange}
+          onChange={handleAmountChange}
+          step="0.01"
+          min="0"
           required
           style={{ background: '#fff', border: '2px solid #eee', borderRadius: '10px' }}
         />
