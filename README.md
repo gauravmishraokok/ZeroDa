@@ -72,7 +72,7 @@ flowchart TD
 ---
 
 ## Overview
-Zero Da is a modern, AI-powered expense tracker and analytics platform. Track your income and expenses, visualize your spending, and get actionable AI insights—all in a beautiful, secure, and easy-to-use web app.
+Zero Da is a modern, AI-powered expense tracker and analytics platform. Track your income and expenses, visualize your spending, and get actionable AI insights, all in a beautiful, secure, and easy-to-use web app.
 
 ---
 
