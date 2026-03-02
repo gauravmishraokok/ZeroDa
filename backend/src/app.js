@@ -4,8 +4,10 @@
     1. Initializes Express application instance
     2. Configures global middleware (JSON parsing, CORS, security headers, logging)
     3. Registers authentication routes
-    4. Defines a health check endpoint for service monitoring
-    5. Exports the configured app for server startup
+    4. Registers transaction routes
+    5. Registers AI routes
+    6. Defines a health check endpoint for service monitoring
+    7. Exports the configured app for server startup
 */
 import express from "express";
 import cors from "cors";
@@ -14,6 +16,7 @@ import morgan from "morgan";
 
 import authRoutes from "./modules/auth/auth.routes.js";
 import transactionRoutes from "./modules/transactions/transactions.routes.js";
+import aiRoutes from "./modules/ai/ai.routes.js";
 
 const app = express();
 
@@ -24,6 +27,7 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/ai', aiRoutes);
 
 
 app.get('/health', (req, res) => {
