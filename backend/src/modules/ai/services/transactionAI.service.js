@@ -15,7 +15,7 @@ import { validateTransaction } from "../validators/transaction.validator.js";
 export const processMessage = async (message) => {
 
     const prompt = transactionPrompt(message);
-    
+
     const raw = await callGemini(prompt);
 
     const parsed = await parseTransaction(raw);

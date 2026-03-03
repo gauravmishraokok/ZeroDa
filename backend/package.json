@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "worker": "node -r dotenv/config src/jobs/ai.worker.js"
   },
   "keywords": [],
   "author": "",
@@ -14,10 +15,12 @@
   "dependencies": {
     "axios": "^1.13.6",
     "bcrypt": "^6.0.0",
+    "bullmq": "^5.70.1",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
+    "ioredis": "^5.10.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.3",
     "morgan": "^1.10.1"

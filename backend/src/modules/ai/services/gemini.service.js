@@ -8,6 +8,9 @@
 */
 import axios from "axios";
 import { env } from "../../../config/env.js";
+import https from "https";
+
+const agent = new https.Agent({ family: 4 });
 
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
 
@@ -25,6 +28,8 @@ export const callGemini = async (prompt, attempt = 1) => {
           "Content-Type": "application/json",
           "X-goog-api-key": env.GEMINI_API_KEY,
         },
+        timeout: 20000,
+        httpsAgent: agent
       }
     );
 
