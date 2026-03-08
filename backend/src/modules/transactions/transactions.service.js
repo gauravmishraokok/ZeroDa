@@ -10,6 +10,7 @@
 import { transactionModel } from "./transactions.model.js";
 
 export const createTransaction = async(data, userId) => {
+    console.log(`[TRANSACTION SERVICE] Creating transaction for user: ${userId}`);
     return await transactionModel.create({
         ...data,
         userId
@@ -17,6 +18,7 @@ export const createTransaction = async(data, userId) => {
 };
 
 export const getTransactions = async(query, userId) => {
+    console.log(`[TRANSACTION SERVICE] Fetching transactions for user: ${userId}`);
     const { page = 1, limit = 10, category, type} = query;
 
     const filter = {
@@ -32,12 +34,14 @@ export const getTransactions = async(query, userId) => {
     .skip((page - 1) * limit)
     .limit(Number(limit));
 
+    console.log(`[TRANSACTION SERVICE] Found ${transactions.length} transactions`);
     return transactions;
 }
 
 
 
 export const deleteTransaction = async (transactionId, userId) => {
+  console.log(`[TRANSACTION SERVICE] Soft deleting transaction: ${transactionId} for user: ${userId}`);
   return await transactionModel.findOneAndUpdate(
     { _id: transactionId, userId },
     { isDeleted: true },

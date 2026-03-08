@@ -8,59 +8,42 @@
     5. Exports controller functions for creating, retrieving, and deleting transactions
 */
 import { createTransaction, getTransactions, deleteTransaction } from './transactions.service.js';
+import asyncHandler from '../../utils/asyncHandler.js';
 
-export const addTransaction = async (req, res) => {
-    try{
-        const transaction = await createTransaction(req.body, req.user._id);
-        
-        res.status(201).json({
-            success : true,
-            message : "Transaction added successfully",
-            data : transaction, 
-        });
-    }
-    catch(error){
-        res.status(400).json({
-            success : false,
-            error : error.message
-        });
-    }
-};
+export const addTransaction = asyncHandler(async (req, res) => {
+    console.log(`[TRANSACTION] Adding transaction for user: ${req.user._id}`);
+    const transaction = await createTransaction(req.body, req.user._id);
+    console.log(`[TRANSACTION] Transaction created: ${transaction._id}`);
+
+    res.status(201).json({
+        success : true,
+        message : "Transaction added successfully",
+        data : transaction, 
+    });
+});
 
 
-export const fetchTransaction = async (req, res) => {
-    try{
-        const transactions = await getTransactions(req.query, req.user._id);
+export const fetchTransaction = asyncHandler(async (req, res) => {
+    console.log(`[TRANSACTION] Fetching transactions for user: ${req.user._id}`);
+    const transactions = await getTransactions(req.query, req.user._id);
+    console.log(`[TRANSACTION] Retrieved ${transactions.length} transactions`);
 
-        res.status(200).json({
-            success : true,
-            message : "Transactions fetched successfully",
-            data : transactions, 
-        });
-    }
-    catch(error){
-        res.status(400).json({
-            success : false,
-            error : error.message
-        });
-    }
-};
+    res.status(200).json({
+        success : true,
+        message : "Transactions fetched successfully",
+        data : transactions, 
+    });
+});
 
 
-export const removeTransaction = async (req, res) => {
-    try{
-        const transaction = await deleteTransaction(req.params.id, req.user._id);
+export const removeTransaction = asyncHandler(async (req, res) => {
+    console.log(`[TRANSACTION] Deleting transaction: ${req.params.id} for user: ${req.user._id}`);
+    const transaction = await deleteTransaction(req.params.id, req.user._id);
+    console.log(`[TRANSACTION] Transaction deleted: ${req.params.id}`);
 
-        res.status(200).json({
-            success : true,
-            message : "Transaction deleted successfully",
-            data : transaction, 
-        });
-    }
-    catch(error){
-        res.status(400).json({
-            success : false,
-            error : error.message
-        });
-    }
-}
+    res.status(200).json({
+        success : true,
+        message : "Transaction deleted successfully",
+        data : transaction, 
+    });
+});

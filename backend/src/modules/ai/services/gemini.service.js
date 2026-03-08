@@ -9,6 +9,7 @@
 import axios from "axios";
 import { env } from "../../../config/env.js";
 import https from "https";
+import AppError from "../../../utils/AppError.js";
 
 const agent = new https.Agent({ family: 4 });
 
@@ -16,6 +17,7 @@ const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemi
 
 export const callGemini = async (prompt, attempt = 1) => {
   const MAX_RETRIES = 1;
+  console.log(`[GEMINI SERVICE] Calling Gemini API (attempt ${attempt})`);
 
   try {
     const response = await axios.post(
@@ -36,26 +38,28 @@ export const callGemini = async (prompt, attempt = 1) => {
     const candidate = response.data?.candidates?.[0];
 
     if (!candidate) {
-      throw new Error("No candidates returned");
+      console.error(`[GEMINI SERVICE] No candidates returned`);
+      throw new AppError("No candidates returned from AI service", 500, "AI_NO_CANDIDATES");
     }
 
     const text = candidate?.content?.parts?.[0]?.text;
 
     if (!text) {
-      console.error("Full response:", JSON.stringify(response.data, null, 2));
-      throw new Error("Empty AI response");
+      console.error(`[GEMINI SERVICE] Empty AI response`);
+      throw new AppError("Empty AI response", 500, "AI_EMPTY_RESPONSE");
     }
 
+    console.log(`[GEMINI SERVICE] Successfully received response (${text.length} chars)`);
     return text.trim();
   }
   catch (error) {
     
     if (attempt < MAX_RETRIES) {
-      console.error(`Retrying Gemini... (${attempt})`);
+      console.error(`[GEMINI SERVICE] Retrying Gemini... (${attempt})`);
       return callGemini(prompt, attempt + 1);
     }
 
-    console.error("Final Gemini Error:", error.response?.data || error.message);
-    throw new Error("AI service failed");
+    console.error(`[GEMINI SERVICE] Final Gemini Error:`, error.response?.data || error.message);
+    throw new AppError("AI service failed", 500, "AI_SERVICE_ERROR");
   }
 };

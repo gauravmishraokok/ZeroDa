@@ -1,8 +1,10 @@
+import AppError from "../../../utils/AppError.js";
+
 export const parseTransaction = (text) => {
 
     try{
         const jsonMatch = text.match(/\{[\s\S]*\}/); // Extract JSON from text
-        if(!jsonMatch) throw new Error("Invalid AI Output Format");
+        if(!jsonMatch) throw new AppError("Invalid AI Output Format", 500, "AI_PARSE_ERROR");
 
         const data = JSON.parse(jsonMatch[0]);
 
@@ -11,10 +13,11 @@ export const parseTransaction = (text) => {
         }
 
         return data;
-        
+
     }
     catch(error){
-        throw new Error("Failed to parse transaction");
+        if (error instanceof AppError) throw error;
+        throw new AppError("Failed to parse transaction", 500, "TRANSACTION_PARSE_ERROR");
     }
 
 };

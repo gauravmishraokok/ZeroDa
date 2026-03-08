@@ -7,24 +7,18 @@
 */
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
+import AppError from "../utils/AppError.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
-export const authenticate = async (req, res, next) => {
-    try{
-        const token = req.headers.authorization?.split(" ")[1]; // Extract token from header
-        
-        if(!token){
-            throw new Error("Unauthorized");
-        }
+export const authenticate = asyncHandler(async (req, res, next) => {
+    const token = req.headers.authorization?.split(" ")[1]; // Extract token from header
 
-        const decoded = jwt.verify(token, env.JWT_SECRET);
-        req.user = decoded; // Attach user data to request
-        
-        next();
+    if(!token){
+        throw new AppError("Unauthorized", 401, "NO_TOKEN");
     }
-    catch(error){
-        res.status(401).json({
-            success : false,
-            error : "Unauthorized"
-        });
-    }
-};
+
+    const decoded = jwt.verify(token, env.JWT_SECRET);
+    req.user = decoded; // Attach user data to request
+
+    next();
+});

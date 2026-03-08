@@ -8,16 +8,15 @@
 import { aiQueue } from "../../queues/ai.queues.js";
 import { generateInsights } from "./services/insights.service.js";
 import { getTransactions } from "../transactions/transactions.service.js";
+import asyncHandler from "../../utils/asyncHandler.js";
+import AppError from "../../utils/AppError.js";
 
-export const parseMessageController = async (req, res) => {
-  try {
+export const parseMessageController = asyncHandler(async (req, res) => {
+    console.log(`[AI] Parsing message for user: ${req.user.id}`);
     const { message } = req.body;
 
     if (!message) {
-      return res.status(400).json({
-        success: false,
-        error: "Message is required",
-      });
+      throw new AppError("Message is required", 400, "MESSAGE_REQUIRED");
     }
 
     // Push job to queue instead of processing here
@@ -33,33 +32,25 @@ export const parseMessageController = async (req, res) => {
       }
     });
 
+    console.log(`[AI] Message queued for processing, job ID: ${job.id}`);
     res.status(202).json({
       success: true,
       message: "Message queued for processing",
-      jobId: job.id, // Useful for tracking
+      data: { jobId: job.id }, // Useful for tracking
     });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      error: err.message,
-    });
-  }
-};
+});
 
-export const generateInsightsController = async (req, res) => {
-  try {
+export const generateInsightsController = asyncHandler(async (req, res) => {
+    console.log(`[AI] Generating insights for user: ${req.user.id}`);
     const transactions = await getTransactions({}, req.user.id);
+    console.log(`[AI] Retrieved ${transactions.length} transactions for analysis`);
 
     const insights = await generateInsights(transactions);
+    console.log(`[AI] Insights generated successfully`);
 
     res.status(200).json({
       success: true,
+      message: "Insights generated successfully",
       data: insights,
     });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      error: err.message,
-    });
-  }
-};
+});

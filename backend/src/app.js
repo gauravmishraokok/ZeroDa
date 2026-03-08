@@ -17,6 +17,7 @@ import morgan from "morgan";
 import authRoutes from "./modules/auth/auth.routes.js";
 import transactionRoutes from "./modules/transactions/transactions.routes.js";
 import aiRoutes from "./modules/ai/ai.routes.js";
+import errorMiddleware from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -36,5 +37,8 @@ app.get('/health', (req, res) => {
         message: "Server is running"
     });
 });
+
+// Global error handling middleware (must be last)
+app.use(errorMiddleware);
 
 export default app;
